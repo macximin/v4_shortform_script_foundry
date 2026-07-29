@@ -14,7 +14,7 @@
 
 ## 3. Core order
 
-`Fact Ledger + Approved Genre Grammar -> Renderer Router -> Series Plan -> Episode State -> Script Packet -> Verification -> Writer Adapter`
+`Fact Ledger + Approved Genre Grammar -> Renderer Router -> Series Plan -> Episode State -> Script Packet -> Verification -> Functional Draft -> Draft Verification -> Creative Writer Adapter`
 
 Fact Ledger가 Renderer 해석보다 우선한다. 해석이 입력 사실을 바꾸거나 불확실성을
 확정 사실로 승격할 수 없다.
@@ -26,6 +26,7 @@ Fact Ledger가 Renderer 해석보다 우선한다. 해석이 입력 사실을 �
 
 ## 5. Current stage
 
-현재 단계는 결정론적 pre-writer 수직 슬라이스다. 합성 fixture로 3회 계획,
-상태 전이, Script Packet과 hard verification을 증명했다. Writer Adapter,
-모델 호출, 실제 작품과 승인본은 별도 owner gate 전에는 추가하지 않는다.
+현재 단계는 결정론적 functional-draft 수직 슬라이스다. 승인된 추상 장르 문법과
+합성 오리지널 fixture로 3회 계획, 상태 전이, Script Packet, 장면 기능 Draft와
+2단 hard verification을 증명했다. Creative Writer Adapter, 모델 호출, 실제
+작품과 승인본은 별도 owner gate 전에는 추가하지 않는다.

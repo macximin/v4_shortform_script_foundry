@@ -10,11 +10,14 @@
 | `episode_state` | state transitions and deferred rewards | dialogue generation |
 | `script_packet` | thin writer-facing episode contract | model execution |
 | `verification` | contract and boundary checks | owner approval |
+| `draft_script` | scene purpose, observable action, dialogue function, information/state deltas and cliff obligation | finished dialogue or prose |
+| `draft_verification` | exact packet binding, information timing, state continuity, cliff and source distance | creative quality or owner approval |
 | `artifacts` | canonical JSON and packet content hashes | packet ownership or promotion |
 | `pipeline` | deterministic stage orchestration | creative model execution |
 
-`writer_adapter`는 독립 장르 문법 packet과 draft verification 계약이 승인된 뒤
-별도 추가한다. 현재 코어에는 모델 또는 외부 서비스 호출이 없다.
+`creative_writer_adapter`는 Functional Draft를 변경 불가 입력 계약으로 받아
+완성 대사·지문 후보를 쓰는 별도 단계다. 현재 코어에는 모델 또는 외부 서비스
+호출이 없다.
 
 ## Manual import boundary
 
