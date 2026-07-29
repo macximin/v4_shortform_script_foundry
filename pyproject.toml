@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "v4-shortform-script-foundry"
-version = "0.0.0"
-description = "Clean-room skeleton for a Renderer Router based shortform script core"
+version = "0.1.0"
+description = "Deterministic pre-writer core for Renderer Router based shortform scripts"
 requires-python = ">=3.12"
 
 [tool.setuptools]
