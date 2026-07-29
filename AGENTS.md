@@ -10,4 +10,5 @@
 - `shortform_reverse_lab`의 결과는 구조 가설로만 읽으며 원천의 고유명사·대사·사건 배열을 복제하지 않는다.
 - 후보를 승인본으로 자동 승격하거나 외부 공개·제작 전달하지 않는다. 승격은 owner만 한다.
 
-현재 단계는 skeleton이다. 수직 슬라이스 승인 전에는 실제 생성 로직이나 모델 호출을 붙이지 않는다.
+현재 단계는 deterministic pre-writer 수직 슬라이스와 승인 grammar 수동 import다.
+Writer Adapter 계약 승인 전에는 모델 호출이나 실제 대사 생성을 붙이지 않는다.

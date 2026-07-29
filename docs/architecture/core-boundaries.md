@@ -4,6 +4,7 @@
 |---|---|---|
 | `fact_ledger` | fact certainty and source bindings | plot interpretation |
 | `genre_grammar` | versioned renderer preferences and evidence bindings | reverse-analysis source ownership |
+| `grammar_import` | manually copied approved abstract blueprint envelopes and hash verification | source media, reverse scripts or automatic cross-repo sync |
 | `renderer_router` | active reward/threat/proof lens selection | fact mutation or prose |
 | `series_plan` | episode function, proof curve, reward and deferral | dialogue or scene prose |
 | `episode_state` | state transitions and deferred rewards | dialogue generation |
@@ -14,3 +15,20 @@
 
 `writer_adapter`는 독립 장르 문법 packet과 draft verification 계약이 승인된 뒤
 별도 추가한다. 현재 코어에는 모델 또는 외부 서비스 호출이 없다.
+
+## Manual import boundary
+
+`shortform_reverse_lab`에서 가져올 수 있는 것은 owner 승인된 추상 기능 청사진뿐이다.
+
+```text
+approved functional blueprint
+  -> manually copied JSON envelope
+  -> payload SHA-256
+  -> source blueprint SHA-256 binding
+  -> grammar canonical owner approval SHA-256
+  -> GenreGrammarPacket
+```
+
+원본 영상, 역대본, 고유명사·직접 대사·정확한 금액·고유 사건 배열은 이 경계를
+넘지 않는다. runtime 자동 read, child 간 writeback과 승인 상태 자동 추적도
+두지 않는다.

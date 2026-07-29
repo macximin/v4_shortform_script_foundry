@@ -1,0 +1,71 @@
+{
+  "schema_version": "1",
+  "artifact_type": "approved_genre_grammar",
+  "artifact_id": "external-proof-reading@0.1.0",
+  "payload": {
+    "source": {
+      "repo": "shortform_reverse_lab",
+      "canary_id": "ep07-institutional-proof-reading",
+      "blueprint_id": "external-proof-reading-v1",
+      "blueprint_sha256": "de89ec9fb0d2cbfe42dd39f20fdb784d953c7aeb13fa3cf9baa6923c05d31219",
+      "distance": "abstract_functional_blueprint_only",
+      "source_specific_tokens_excluded": true
+    },
+    "usage_constraints": [
+      "internal_private_analysis_only",
+      "no_commercial_use",
+      "no_external_publication",
+      "no_source_asset_distribution"
+    ],
+    "grammar": {
+      "grammar_id": "external-proof-reading",
+      "version": "0.1.0",
+      "target_profile": "social-power-hybrid",
+      "entry_pressure": "disputed_proof_is_socially_illegible",
+      "primary_reward": "credible_authority_updates_judgment",
+      "preferences": [
+        {
+          "renderer": "social_recognition",
+          "weight": 100,
+          "threat": "proof_remains_socially_illegible",
+          "proof_mode": "qualified_external_reading",
+          "reward_target": "credible_authority_updates_judgment",
+          "required_fact_tags": [
+            "disputed_portable_proof",
+            "external_validator",
+            "misperception"
+          ]
+        },
+        {
+          "renderer": "status",
+          "weight": 90,
+          "threat": "high_value_marker_is_misread",
+          "proof_mode": "authority_reads_status_marker",
+          "reward_target": "status_reclassification_before_material_reward",
+          "required_fact_tags": [
+            "disputed_portable_proof",
+            "authority",
+            "misperception"
+          ]
+        },
+        {
+          "renderer": "resource",
+          "weight": 70,
+          "threat": "material_value_is_denied",
+          "proof_mode": "material_payout_is_delayed_until_after_reading",
+          "reward_target": "tangible_result_remains_deferred",
+          "required_fact_tags": [
+            "disputed_portable_proof",
+            "resource_value"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "shortform_reverse_lab:ep07-institutional-proof-reading:external-proof-reading-v1@sha256:de89ec9fb0d2cbfe42dd39f20fdb784d953c7aeb13fa3cf9baa6923c05d31219"
+      ],
+      "status": "approved",
+      "owner_approval_sha256": "67a650273543cc3787096ffd24e47b7b2442bcca6580ca84dd368364c1d738a5"
+    }
+  },
+  "payload_sha256": "19956320412cb687f73922622487812a290ff295c72dfb78c4f461136f3fb1f6"
+}
