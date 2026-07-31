@@ -14,10 +14,28 @@
 
 ## 3. Core order
 
-`Fact Ledger + Approved Genre Grammar -> Renderer Router -> Series Plan -> Episode State -> Script Packet -> Verification -> Functional Draft -> Draft Verification -> Creative Writer Adapter`
+```text
+Fact Ledger + Approved Genre Grammar
+  -> HIL 1 Canonical Package
+  -> Renderer Router + HIL 2 state-transition Arc Contract
+  -> selectable Beat Pattern + writer scaffold
+  -> Creative Writer candidate
+  -> hard verification
+  -> independent BR0 / BR1 creative floor and pairwise review
+  -> HIL 3 finished Episode Script owner approval
+```
 
 Fact Ledger가 Renderer 해석보다 우선한다. 해석이 입력 사실을 바꾸거나 불확실성을
 확정 사실로 승격할 수 없다.
+
+HIL 1은 사건 배열을 잠그지 않고 작품 약속, 주인공의 작동 정체성, agency
+전환 범위, 관객 정보 비대칭 원칙과 Renderer 범위를 승인한다. HIL 2는 고정
+회차 수가 아니라 상태 전환을 승인한다. HIL 3만 실제 대사·지문이 있는 완성
+회차 대본을 승인한다.
+
+기존 `Series Plan -> Script Packet -> Functional Draft`는 EP07 계약 canary와
+writer scaffold로 유지하되 HIL 승인 정본이나 모든 작품의 보편 4비트 공식으로
+승격하지 않는다.
 
 ## 4. Promotion gate
 
@@ -26,7 +44,15 @@ Fact Ledger가 Renderer 해석보다 우선한다. 해석이 입력 사실을 �
 
 ## 5. Current stage
 
-현재 단계는 결정론적 functional-draft 수직 슬라이스다. 승인된 추상 장르 문법과
-합성 오리지널 fixture로 3회 계획, 상태 전이, Script Packet, 장면 기능 Draft와
-2단 hard verification을 증명했다. Creative Writer Adapter, 모델 호출, 실제
-작품과 승인본은 별도 owner gate 전에는 추가하지 않는다.
+현재 단계는 **HIL contract vertical slice**다.
+
+- 기존 deterministic functional-draft canary는 회귀 기준으로 유지한다.
+- HIL 1 Canonical Package와 HIL 2 Arc Contract가 구현됐다.
+- content hash와 approval receipt가 분리됐다.
+- immutable revision, stale 전파, 첫 미완 승인점 재개와 fail-fast가 구현됐다.
+- 선택형 Beat Pattern, 완성 회차 대본 후보 계약, creative absolute floor,
+  독립 BR0/BR1, 구조적으로 다른 후보 비교와 HIL 3 promotion readiness가
+  구현됐다.
+
+아직 Creative Writer 모델 호출, 실제 작품 후보, 실제 owner 승인본과 외부
+배포는 없다.

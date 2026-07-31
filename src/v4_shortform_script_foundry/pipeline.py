@@ -14,6 +14,24 @@ from .series_plan import SeriesPlan, SeriesPlanner
 from .verification import ScriptVerifier, VerificationReport
 
 
+class PipelineHardFailure(RuntimeError):
+    """Stops the pipeline before a failed artifact can feed downstream work."""
+
+    def __init__(
+        self,
+        *,
+        stage: str,
+        episode_number: int,
+        report: VerificationReport | DraftVerificationReport,
+    ) -> None:
+        super().__init__(
+            f"{stage} hard verification failed for episode {episode_number}"
+        )
+        self.stage = stage
+        self.episode_number = episode_number
+        self.report = report
+
+
 @dataclass(frozen=True, slots=True)
 class PipelineResult:
     plan: SeriesPlan
@@ -80,6 +98,12 @@ class V4ShortformPipeline:
                 state_after,
             )
             report = self._verifier.verify(packet, contract, ledger, grammar)
+            if not report.passed:
+                raise PipelineHardFailure(
+                    stage="script_packet",
+                    episode_number=contract.episode_number,
+                    report=report,
+                )
             draft = self._draft_adapter.build(
                 packet,
                 contract,
@@ -92,6 +116,12 @@ class V4ShortformPipeline:
                 contract,
                 ledger,
             )
+            if not draft_report.passed:
+                raise PipelineHardFailure(
+                    stage="functional_draft",
+                    episode_number=contract.episode_number,
+                    report=draft_report,
+                )
             states.append(state_after)
             packets.append(packet)
             reports.append(report)

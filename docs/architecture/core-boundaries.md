@@ -12,12 +12,39 @@
 | `verification` | contract and boundary checks | owner approval |
 | `draft_script` | scene purpose, observable action, dialogue function, information/state deltas and cliff obligation | finished dialogue or prose |
 | `draft_verification` | exact packet binding, information timing, state continuity, cliff and source distance | creative quality or owner approval |
+| `approval` | immutable HIL revisions, content/receipt hash separation, owner approval, stale propagation and resume boundary | story generation or reviewer identity authentication |
+| `canonical_package` | HIL 1 creative north star, operating identity, agency range, audience information principles and renderer range | event order, exact reveals or episode prose |
+| `arc_contract` | HIL 2 state transition, multi-axis story state, episode band and revision proposal | fixed episode allocation or finished dialogue |
+| `beat_patterns` | selectable renderer-compatible episode function patterns | universal beat count or story formula |
+| `episode_script` | HIL 3 finished script candidate and hard arc/runtime/state/reward binding | creative preference or automatic promotion |
+| `writer_adapter` | backend-neutral writer request, strict structured-output parsing and unscreened draft projection | source/reference access, model vendor selection or promotion |
+| `source_distance_import` | manual Eval receipt verification and exact draft projection binding | source comparison, threshold calibration or raw reference text |
+| `creative_review` | common creative floor, independent BR0/BR1, structurally distinct candidate set and promotion readiness | hard fact verification or owner substitution |
 | `artifacts` | canonical JSON and packet content hashes | packet ownership or promotion |
-| `pipeline` | deterministic stage orchestration | creative model execution |
+| `pipeline` | deterministic legacy-canary orchestration and hard fail-fast | creative model execution |
 
-`creative_writer_adapter`는 Functional Draft를 변경 불가 입력 계약으로 받아
-완성 대사·지문 후보를 쓰는 별도 단계다. 현재 코어에는 모델 또는 외부 서비스
-호출이 없다.
+기존 `Functional Draft`는 EP07 evidence-reversal canary의 엄격한 scaffold다.
+새 Creative Writer Adapter는 HIL 1·2 hard invariant와 선택된 Beat Pattern을
+보존하되, 장면 수·비트 순서·시간·공개 방식을 후보별로 바꿀 수 있어야 한다.
+현재 코어에는 모델 또는 외부 서비스 호출이 없다. 실제 backend는
+`WriterBackend` protocol을 구현해 별도 주입하며, adapter는 backend가 어떤
+서비스인지 알지 않는다.
+
+## Source-distance boundary
+
+```text
+WriterDraft projection (Foundry)
+  -> manual input to Eval
+  -> calibrated source-distance receipt (no raw source)
+  -> manual JSON copy
+  -> receipt hash + candidate projection hash verification
+  -> EpisodeScriptCandidate(status=candidate)
+```
+
+`review_required`나 `fail` receipt는 HIL 3 후보를 만들 수 없다. `pass`여도
+정책 tier가 `production_approved`가 아니면 실제 후보 경로에서 거절한다.
+합성 canary는 테스트가 별도로 허용한 경우에만 계약 검증에 쓴다. 기준값의
+소유와 보정은 Eval, 원문과 권리 상태는 Reference가 소유한다.
 
 ## Manual import boundary
 

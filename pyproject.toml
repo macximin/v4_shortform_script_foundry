@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "v4-shortform-script-foundry"
-version = "0.1.0"
-description = "Deterministic pre-writer core for Renderer Router based shortform scripts"
+version = "0.4.0"
+description = "Hash-bound HIL core for original shortform script candidates"
 requires-python = ">=3.12"
 
 [tool.setuptools]

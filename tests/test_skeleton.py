@@ -13,6 +13,12 @@ sys.path.insert(0, str(ROOT / "src"))
 class SkeletonTests(unittest.TestCase):
     def test_core_boundaries_are_importable(self) -> None:
         modules = (
+            "approval",
+            "arc_contract",
+            "beat_patterns",
+            "canonical_package",
+            "creative_review",
+            "episode_script",
             "fact_ledger",
             "renderer_router",
             "episode_state",

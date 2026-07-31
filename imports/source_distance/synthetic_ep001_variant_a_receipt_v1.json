@@ -1,0 +1,27 @@
+{
+  "calibration_receipt_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "candidate_id": "original-work:ep001:variant-a",
+  "candidate_projection_sha256": "4905493ca4e618752f999009449cc2635d9fceda3fa9d3d48446f1f8d2c095e3",
+  "decision": "pass",
+  "evaluated_at": "2026-07-30T15:00:00+09:00",
+  "evaluator_version": "source-distance-v1",
+  "metrics": [
+    {
+      "allowed_phrase_hashes": [],
+      "char_ngram_jaccard": 0.03413,
+      "event_lcs_ratio": 0.0,
+      "forbidden_phrase_hashes": [],
+      "longest_common_span_chars": 10,
+      "review_trigger_codes": [],
+      "source_id": "synthetic-source-01",
+      "word_shingle_jaccard": 0.0
+    }
+  ],
+  "policy_content_sha256": "ed29ea79b026b74f89395ddfb34fecfa7a19de4a57a3454666416124ee547526",
+  "policy_id": "synthetic-calibrated-policy",
+  "policy_tier": "synthetic_canary",
+  "policy_version": "fixture-v1",
+  "receipt_sha256": "d5dfc35e063009ff08fe9e46c5e48eeeb6344796b61b7987bf506f1cccbec12c",
+  "receipt_version": "1",
+  "reference_manifest_sha256": "977b0ec470ad49bb8617ec83df5efa1488ab9a5dd870f2a7d8036e311a149cc2"
+}
