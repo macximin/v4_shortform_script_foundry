@@ -58,6 +58,7 @@ def valid_output(episode_id: str) -> dict[str, object]:
                 "causal_role": "meaningful_choice",
                 "renderer_primary": "competence",
                 "renderer_secondary": ["social_recognition"],
+                "principal_character_ids": ["protagonist", "evaluator"],
                 "duration_seconds": 40,
                 "dialogue": [
                     {
@@ -81,6 +82,7 @@ def valid_output(episode_id: str) -> dict[str, object]:
                 "causal_role": "meaningful_action",
                 "renderer_primary": "competence",
                 "renderer_secondary": ["social_recognition"],
+                "principal_character_ids": ["protagonist", "evaluator"],
                 "duration_seconds": 50,
                 "dialogue": [
                     {
@@ -147,6 +149,12 @@ class WriterAdapterTests(unittest.TestCase):
             self.request.candidate_id,
             draft.source_distance_projection.candidate_id,
         )
+        self.assertEqual(
+            ("protagonist", "field_partner"),
+            self.request.core_character_ids,
+        )
+        self.assertEqual(3, self.request.max_principal_characters_per_scene)
+        self.assertTrue(self.request.action_driven)
 
     def test_adapter_rejects_unexpected_structured_output_field(self) -> None:
         output = valid_output(self.request.episode_id)
@@ -187,6 +195,22 @@ class WriterAdapterTests(unittest.TestCase):
                 producer_id="writer-a",
                 source_scaffold_sha256=digest("writer-scaffold"),
                 target_runtime_seconds=90,
+                beat_pattern=BeatPatternKind.COMPETENCE_RECOGNITION,
+            )
+
+    def test_request_rejects_runtime_outside_hil_one_range(self) -> None:
+        with self.assertRaisesRegex(ValueError, "production range"):
+            WriterRequest.build(
+                canonical=self.canonical,
+                canonical_approval=self.hil1,
+                arc=self.arc,
+                arc_approval=self.hil2,
+                candidate_id="original-work:ep001:too-long",
+                episode_id="original-work:ep001",
+                revision=1,
+                producer_id="writer-a",
+                source_scaffold_sha256=digest("too-long-scaffold"),
+                target_runtime_seconds=121,
                 beat_pattern=BeatPatternKind.COMPETENCE_RECOGNITION,
             )
 

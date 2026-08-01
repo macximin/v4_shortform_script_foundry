@@ -17,7 +17,9 @@
 ```text
 Fact Ledger + Approved Genre Grammar
   -> HIL 1 Canonical Package
+  -> owner-readable HIL 1 planning document
   -> Renderer Router + HIL 2 state-transition Arc Contract
+  -> owner-readable HIL 2 planning document
   -> selectable Beat Pattern + writer scaffold
   -> Creative Writer candidate
   -> hard verification
@@ -28,10 +30,11 @@ Fact Ledger + Approved Genre Grammar
 Fact Ledger가 Renderer 해석보다 우선한다. 해석이 입력 사실을 바꾸거나 불확실성을
 확정 사실로 승격할 수 없다.
 
-HIL 1은 사건 배열을 잠그지 않고 작품 약속, 주인공의 작동 정체성, agency
-전환 범위, 관객 정보 비대칭 원칙과 Renderer 범위를 승인한다. HIL 2는 고정
-회차 수가 아니라 상태 전환을 승인한다. HIL 3만 실제 대사·지문이 있는 완성
-회차 대본을 승인한다.
+HIL 1은 사건 배열을 잠그지 않고 작품 약속, 핵심 인물 1–3명의 작동 정체성,
+agency 전환 범위, 회차·아크·시즌·미래 떡밥 보상 층위, 제작 제약, 관객 정보
+비대칭 원칙과 Renderer 범위를 승인한다. HIL 2는 고정 회차 수가 아니라 관계,
+지식, 자원과 세계 운영을 포함한 상태 전환을 승인한다. HIL 3만 실제
+대사·지문이 있는 완성 회차 대본을 승인한다.
 
 기존 `Series Plan -> Script Packet -> Functional Draft`는 EP07 계약 canary와
 writer scaffold로 유지하되 HIL 승인 정본이나 모든 작품의 보편 4비트 공식으로
@@ -48,11 +51,16 @@ writer scaffold로 유지하되 HIL 승인 정본이나 모든 작품의 보편 
 
 - 기존 deterministic functional-draft canary는 회귀 기준으로 유지한다.
 - HIL 1 Canonical Package와 HIL 2 Arc Contract가 구현됐다.
+- HIL 1은 1–3명의 핵심 인물과 cadence별 payoff layer를 소유한다.
+- HIL 2는 resource/world-operation 상태와 HIL 1 제작 제약을 보존한다.
+- HIL 1/2의 canonical JSON과 동일 hash에 결합된 사람이 읽는 Markdown
+  기획서 출력이 구현됐다.
 - content hash와 approval receipt가 분리됐다.
 - immutable revision, stale 전파, 첫 미완 승인점 재개와 fail-fast가 구현됐다.
 - 선택형 Beat Pattern, 완성 회차 대본 후보 계약, creative absolute floor,
   독립 BR0/BR1, 구조적으로 다른 후보 비교와 HIL 3 promotion readiness가
   구현됐다.
 
-아직 Creative Writer 모델 호출, 실제 작품 후보, 실제 owner 승인본과 외부
-배포는 없다.
+첫 실제 작품 HIL 1 candidate set은 생성됐지만 owner 미승인이고
+premise-distance 검사는 pending이다. 아직 Creative Writer 모델 호출, 실제
+HIL 2/3 작품 후보, 실제 owner 승인본, 기획서 review UI와 외부 배포는 없다.

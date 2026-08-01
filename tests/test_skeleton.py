@@ -20,6 +20,7 @@ class SkeletonTests(unittest.TestCase):
             "creative_review",
             "episode_script",
             "fact_ledger",
+            "planning_artifact",
             "renderer_router",
             "episode_state",
             "script_packet",

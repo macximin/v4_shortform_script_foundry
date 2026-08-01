@@ -8,7 +8,11 @@ import re
 
 from .beat_patterns import BeatPatternKind, validate_pattern_choice
 from .canonical import canonical_sha256
-from .canonical_package import CanonicalPackage
+from .canonical_package import (
+    CanonicalPackage,
+    PayoffCadence,
+    ProductionConstraints,
+)
 from .genre_grammar import RendererKind
 
 
@@ -41,6 +45,8 @@ class StoryStateAxis(StrEnum):
     STATUS = "status"
     BELONGING = "belonging"
     SAFETY = "safety"
+    RESOURCE = "resource"
+    WORLD_OPERATION = "world_operation"
     PROOF_OR_EQUIVALENT = "proof_or_equivalent"
 
 
@@ -116,6 +122,7 @@ class ArcContract:
     acceptance_criteria: tuple[ArcAcceptanceCriterion, ...]
     episode_count_min: int
     episode_count_max: int
+    production_constraints: ProductionConstraints
     continuity_invariants: tuple[str, ...]
     renderer_mix: tuple[RendererKind, ...]
     allowed_beat_patterns: tuple[BeatPatternKind, ...]
@@ -165,6 +172,10 @@ class ArcContract:
             raise ValueError("episode_count_min must be positive")
         if self.episode_count_max < self.episode_count_min:
             raise ValueError("episode_count_max must be at least episode_count_min")
+        if not isinstance(self.production_constraints, ProductionConstraints):
+            raise TypeError(
+                "production_constraints must be ProductionConstraints"
+            )
         if not self.renderer_mix:
             raise ValueError("renderer_mix must not be empty")
         if len(self.renderer_mix) != len(set(self.renderer_mix)):
@@ -263,6 +274,37 @@ class ArcContractVerifier:
                 "CANONICAL_HASH_MISMATCH",
                 "parent_canonical_content_sha256",
                 "arc must bind the exact canonical package",
+            )
+        if contract.production_constraints != canonical.production_constraints:
+            hard(
+                "PRODUCTION_CONSTRAINT_MISMATCH",
+                "production_constraints",
+                "arc must preserve the exact HIL 1 production constraints",
+            )
+        payoff_layers = {
+            layer.payoff_id: layer for layer in canonical.payoff_layers
+        }
+        arc_reward_ids = set(contract.rewards_paid).union(
+            contract.rewards_deferred
+        )
+        unknown_reward_ids = arc_reward_ids - set(payoff_layers)
+        if unknown_reward_ids:
+            hard(
+                "REWARD_OUTSIDE_CANONICAL_LAYERS",
+                "rewards_paid",
+                "arc rewards must identify HIL 1 payoff layers",
+            )
+        future_seed_paid = {
+            reward_id
+            for reward_id in contract.rewards_paid
+            if reward_id in payoff_layers
+            and payoff_layers[reward_id].cadence is PayoffCadence.FUTURE_SEED
+        }
+        if future_seed_paid:
+            hard(
+                "FUTURE_SEED_PAID_EARLY",
+                "rewards_paid",
+                "future-seed payoffs may be deferred but not paid in the current arc",
             )
         disallowed_renderers = set(contract.renderer_mix) - set(
             canonical.allowed_renderers

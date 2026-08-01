@@ -58,6 +58,7 @@ class EpisodeScene:
     causal_role: CausalRole
     renderer_primary: RendererKind
     renderer_secondary: tuple[RendererKind, ...]
+    principal_character_ids: tuple[str, ...]
     duration_seconds: int
     dialogue: tuple[DialogueLine, ...]
     information_revealed_ids: tuple[str, ...]
@@ -87,6 +88,17 @@ class EpisodeScene:
             raise ValueError("renderer_secondary must not repeat renderer_primary")
         if len(self.renderer_secondary) != len(set(self.renderer_secondary)):
             raise ValueError("renderer_secondary must be unique")
+        if not self.principal_character_ids:
+            raise ValueError("principal_character_ids must not be empty")
+        if any(
+            not character_id.strip()
+            for character_id in self.principal_character_ids
+        ):
+            raise ValueError("principal_character_ids values must not be empty")
+        if len(self.principal_character_ids) != len(
+            set(self.principal_character_ids)
+        ):
+            raise ValueError("principal_character_ids must be unique")
         if self.duration_seconds < 1:
             raise ValueError("scene duration must be positive")
         for field_name in (
@@ -254,6 +266,37 @@ class EpisodeScriptVerifier:
                 "parent_arc_content_sha256",
                 "episode script must bind the exact Arc Contract",
             )
+        constraints = arc.production_constraints
+        if not (
+            constraints.target_runtime_seconds_min
+            <= script.target_runtime_seconds
+            <= constraints.target_runtime_seconds_max
+        ):
+            hard(
+                "RUNTIME_OUTSIDE_PRODUCTION_RANGE",
+                "target_runtime_seconds",
+                "episode runtime must stay within the HIL 1 production range",
+            )
+        for scene in script.scenes:
+            if (
+                len(scene.principal_character_ids)
+                > constraints.max_principal_characters_per_scene
+            ):
+                hard(
+                    "SCENE_PRINCIPAL_LIMIT_EXCEEDED",
+                    scene.scene_id,
+                    "scene principal count exceeds the production constraint",
+                )
+            if (
+                constraints.max_dialogue_lines_per_scene is not None
+                and len(scene.dialogue)
+                > constraints.max_dialogue_lines_per_scene
+            ):
+                hard(
+                    "SCENE_DIALOGUE_LIMIT_EXCEEDED",
+                    scene.scene_id,
+                    "scene dialogue count exceeds the production constraint",
+                )
         if script.beat_pattern not in arc.allowed_beat_patterns:
             hard(
                 "BEAT_PATTERN_OUTSIDE_ARC",
@@ -329,12 +372,12 @@ class EpisodeScriptVerifier:
             )
         if (
             script.obligation_kind is EpisodeObligationKind.CLOSURE
-            and script.rewards_deferred
+            and not script.rewards_paid
         ):
             hard(
-                "CLOSURE_DEFERS_REWARD",
-                "rewards_deferred",
-                "closure episodes cannot silently defer rewards",
+                "CLOSURE_WITHOUT_PAID_REWARD",
+                "rewards_paid",
+                "closure episodes must pay at least one authorized reward",
             )
         return EpisodeScriptVerificationReport(
             episode_id=script.episode_id,

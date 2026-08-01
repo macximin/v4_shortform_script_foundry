@@ -1,4 +1,9 @@
-"""Three-level series plan: season spine, episode function, and reward curve."""
+"""Legacy deterministic canary plan with a genre-neutral reward curve.
+
+Real works use HIL 1 ``CanonicalPackage`` and HIL 2 ``ArcContract``. This
+planner remains for the deterministic functional-draft canary and must not
+silently impose a public-recognition story on production candidates.
+"""
 
 from __future__ import annotations
 
@@ -15,6 +20,7 @@ class ProofStage(IntEnum):
     CLAIMED = 1
     INDICATED = 2
     MATERIALIZED = 3
+    REWARD_REALIZED = 4
     PUBLICLY_RECOGNIZED = 4
 
 
@@ -119,10 +125,10 @@ class SeriesPlanner:
         if episode_count == 1 or episode_number == episode_count:
             return (
                 EpisodeFunction.PAYOFF_AND_REOPEN,
-                ProofStage.PUBLICLY_RECOGNIZED,
+                ProofStage.REWARD_REALIZED,
                 (grammar.primary_reward,),
                 f"what_cost_follows_{decision.reward_target}",
-                "publicly_reclassified",
+                "reward_effect_registered",
                 "primary_reward_paid",
             )
         if episode_number == 1:
@@ -131,14 +137,14 @@ class SeriesPlanner:
                 ProofStage.INDICATED,
                 ("curiosity_lock",),
                 f"can_{decision.proof_mode}_survive_challenge",
-                "devaluation_contested",
+                "initial_state_contested",
                 "pressure_registered",
             )
         return (
             EpisodeFunction.ESCALATION,
             ProofStage.MATERIALIZED,
             ("proof_progress",),
-            f"will_{decision.proof_mode}_change_public_judgment",
-            "credible_minority_updates",
+            f"will_{decision.proof_mode}_change_target_state",
+            "relevant_observers_update",
             "proof_moved",
         )

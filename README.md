@@ -2,13 +2,15 @@
 
 Renderer Router 기반 숏폼 스토리보드 대본 생성 코어를 clean-room으로 개발하는 독립 edge repo다.
 
-현재는 **Creative Writer Adapter vertical slice** 상태다. 기존의 deterministic
-functional-draft canary를 보존하면서, HIL 1/2/3 계약과 무효화·재개·품질
-비교, pluggable writer backend의 strict structured output 검증, Eval
-source-distance receipt의 수동 hash-bound 반입을 구현했다.
+현재는 **owner-readable planning + Creative Writer Adapter vertical
+slice** 상태다. 기존 deterministic functional-draft canary를 보존하면서,
+HIL 1/2/3 계약과 무효화·재개·품질 비교, pluggable writer backend의 strict
+structured output 검증, Eval source-distance receipt의 수동 hash-bound
+반입을 구현했다.
 
-아직 실제 모델/API backend, 실제 작품 데이터, 실제 owner 승인 대본과 외부
-배포 기능은 없다. 테스트의 완성 대본은 계약 검증용 합성 fixture다.
+아직 실제 모델/API backend, 실제 owner 승인 대본과 외부 배포 기능은 없다.
+첫 실제 작품 HIL 1 candidate set은 존재하지만 owner 미승인이고 premise-distance
+검사는 pending이다. 테스트의 완성 대본은 계약 검증용 합성 fixture다.
 
 ## Core flow
 
@@ -16,7 +18,9 @@ source-distance receipt의 수동 hash-bound 반입을 구현했다.
 Fact Ledger
   + Approved Genre Grammar Packet
   -> HIL 1 Canonical Package
+  -> owner-readable HIL 1 planning document
   -> Renderer Router + HIL 2 state-transition Arc Contract
+  -> owner-readable HIL 2 planning document
   -> selectable Beat Pattern + writer scaffold
   -> Creative Writer Adapter -> unscreened Writer Draft
   -> independent Eval source-distance receipt
@@ -34,7 +38,8 @@ Fact Ledger
 - `grammar_import`: reverse lab의 승인된 추상 blueprint만 독립 hash envelope로
   수동 반입한다.
 - `renderer_router`: 확정 fact tag가 허용하는 위협·증거·보상 렌더러를 선택한다.
-- `series_plan`: 3회 시즌 스파인, 증거 단계와 보상 곡선을 만든다.
+- `series_plan`: deterministic canary용 장르 중립 보상 곡선을 만든다. 실제
+  작품의 HIL 1/2 기획 정본이 아니다.
 - `episode_state`: 실제/인식 지위, 지식 지도, 증거 단계와 보상 유예를 관리한다.
 - `script_packet`: 작가 어댑터에 넘길 얇은 회차 계약을 소유한다.
 - `verification`: 사실·연속성·렌더러 정합성과 레퍼런스 거리를 검증한다.
@@ -44,13 +49,19 @@ Fact Ledger
   자동 승격과 source-distance 위반을 차단한다.
 - `approval`: content hash와 승인 receipt를 분리하고 revision, stale,
   resume boundary와 owner-only 승격을 소유한다.
-- `canonical_package`: HIL 1 작품 약속, 주인공 작동 정체성, agency 전환
-  범위, 관객 정보 원칙과 Renderer 범위를 소유한다.
+- `canonical_package`: HIL 1 작품 약속, 핵심 인물 1–3명의 작동 정체성,
+  회차·아크·시즌·미래 떡밥 보상 층위, 제작 제약, 관객 정보 원칙과
+  Renderer 범위를 소유한다.
 - `arc_contract`: HIL 2 상태전환, 다차원 Story State, episode count band와
-  revision proposal을 소유한다.
+  revision proposal을 소유한다. Story State는 resource와 world operation을
+  포함하며 HIL 1 제작 제약을 그대로 결합한다.
+- `planning_artifact`: 정확한 HIL 1/2 canonical JSON hash에 결합된
+  owner-readable Markdown 기획서를 결정론적으로 출력한다.
 - `beat_patterns`: 증거 역전, suspense 정보 격차, 능력 인정, 선택·안전
   패턴을 선택지로 제공하며 어느 하나도 보편 공식으로 만들지 않는다.
 - `episode_script`: HIL 3 완성 회차 대본 후보와 hard verifier를 소유한다.
+  장면별 주요 인물 수, 러닝타임과 선택형 대사 줄 상한을 제작 제약으로
+  검증한다.
 - `writer_adapter`: 승인된 HIL 1/2 hash만 받는 backend-neutral request,
   strict structured output parser와 아직 거리 검사를 통과하지 않은 draft를
   소유한다. 원문·reference packet은 받지 않는다.
@@ -93,6 +104,18 @@ py -3.12 tools/build_loop04_canary.py
 완성 대사나 지문이 아니라 Creative Writer Adapter가 따라야 할 증거급 기능
 계약이며 모든 draft는 `candidate`다.
 
+첫 실제 작품 HIL 1 후보 세 개는 다음 명령으로 재생성·검증한다.
+
+```powershell
+py -3.12 tools/build_afterlife_restaurant_hil1_candidates.py
+py -3.12 tools/build_afterlife_restaurant_hil1_candidates.py --check
+```
+
+결과는 `artifacts/candidates/afterlife_restaurant/hil1/`에 저장된다. 동일한
+Fact Ledger 위에서 감정 미스터리, 식당 누적 운영, 충돌하는 동업 관계의
+서로 다른 주 보상을 비교한다. 세 후보 모두 owner 미승인이고 HIL 2 입력이
+아니다.
+
 ## HIL 계약이 보장하는 것
 
 - 승인 hash는 content hash와 별도 receipt다.
@@ -100,6 +123,9 @@ py -3.12 tools/build_loop04_canary.py
 - 재개는 parent content hash와 parent approval receipt가 모두 맞는 첫 미완
   승인점에서 시작한다.
 - 단일 Renderer와 고정 4비트를 모든 작품에 강제하지 않는다.
+- 단일 주인공이나 단일 보상 cadence를 모든 작품에 강제하지 않는다.
+- 미래 시즌 떡밥은 현재 아크에서 지급 보상으로 소진할 수 없다.
+- HIL 1/2 기획서는 원본 계약과 같은 canonical content hash를 검증한다.
 - HIL 3은 hard verifier, creative absolute floor, 구조적으로 다른 후보,
   producer-distinct BR0/BR1과 owner 승인 없이는 준비 완료가 되지 않는다.
 - 후보가 creative floor를 하나도 통과하지 못하면 owner 선택으로 우회하지 않는다.

@@ -98,6 +98,11 @@ class WriterRequest:
     hard_invariants: tuple[str, ...]
     creative_latitude: tuple[str, ...]
     allowed_renderers: tuple[RendererKind, ...]
+    core_character_ids: tuple[str, ...]
+    max_principal_characters_per_scene: int
+    action_driven: bool
+    dialogue_policy: str
+    max_dialogue_lines_per_scene: int | None
     dramatic_question: str
     core_pressure: str
     core_choice: str
@@ -155,6 +160,15 @@ class WriterRequest:
             )
         if revision < 1:
             raise ValueError("revision must be positive")
+        constraints = canonical.production_constraints
+        if not (
+            constraints.target_runtime_seconds_min
+            <= target_runtime_seconds
+            <= constraints.target_runtime_seconds_max
+        ):
+            raise ValueError(
+                "target_runtime_seconds is outside the HIL 1 production range"
+            )
         return cls(
             candidate_id=candidate_id,
             work_id=canonical.work_id,
@@ -179,6 +193,18 @@ class WriterRequest:
             ),
             creative_latitude=canonical.originality.creative_latitude,
             allowed_renderers=arc.renderer_mix,
+            core_character_ids=tuple(
+                character.character_id
+                for character in canonical.core_characters
+            ),
+            max_principal_characters_per_scene=(
+                canonical.production_constraints.max_principal_characters_per_scene
+            ),
+            action_driven=canonical.production_constraints.action_driven,
+            dialogue_policy=canonical.production_constraints.dialogue_policy,
+            max_dialogue_lines_per_scene=(
+                canonical.production_constraints.max_dialogue_lines_per_scene
+            ),
             dramatic_question=arc.dramatic_question,
             core_pressure=arc.core_pressure,
             core_choice=arc.core_choice,
@@ -312,6 +338,7 @@ class CreativeWriterAdapter:
             "causal_role",
             "renderer_primary",
             "renderer_secondary",
+            "principal_character_ids",
             "duration_seconds",
             "dialogue",
             "information_revealed_ids",
@@ -417,6 +444,10 @@ class CreativeWriterAdapter:
                         f"{location}.renderer_secondary",
                     )
                 )
+            ),
+            principal_character_ids=_text_tuple(
+                value["principal_character_ids"],
+                f"{location}.principal_character_ids",
             ),
             duration_seconds=_require_int(
                 value["duration_seconds"],

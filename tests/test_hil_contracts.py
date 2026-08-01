@@ -39,8 +39,11 @@ from v4_shortform_script_foundry.canonical import (  # noqa: E402
 from v4_shortform_script_foundry.canonical_package import (  # noqa: E402
     AudienceInformationContract,
     CanonicalPackage,
+    CoreCharacterContract,
     OriginalityContract,
-    ProtagonistContract,
+    PayoffCadence,
+    PayoffLayer,
+    ProductionConstraints,
 )
 from v4_shortform_script_foundry.creative_review import (  # noqa: E402
     COMMON_FLOOR_AXES,
@@ -81,18 +84,35 @@ def make_canonical(*, revision: int = 1) -> CanonicalPackage:
             "A dismissed operations analyst earns a new team's trust through "
             "visible decisions while the old team misreads the departure."
         ),
-        protagonist=ProtagonistContract(
-            character_id="protagonist",
-            goal="build a safe professional identity outside the old group",
-            failure_cost="remain defined by the old group's accusation",
-            operating_identity_invariant_kernel=(
-                "reads systems, tests claims, and acts through demonstrated work"
+        core_characters=(
+            CoreCharacterContract(
+                character_id="protagonist",
+                narrative_role="lead",
+                goal="build a safe professional identity outside the old group",
+                failure_cost="remain defined by the old group's accusation",
+                operating_identity_invariant_kernel=(
+                    "reads systems, tests claims, and acts through demonstrated work"
+                ),
+                initial_agency_state="defensive_explanation",
+                allowed_agency_transitions=(
+                    "boundary_setting",
+                    "independent_execution",
+                    "public_ownership",
+                ),
             ),
-            initial_agency_state="defensive_explanation",
-            allowed_agency_transitions=(
-                "boundary_setting",
-                "independent_execution",
-                "public_ownership",
+            CoreCharacterContract(
+                character_id="field_partner",
+                narrative_role="co_lead",
+                goal="protect the new group without repeating its old habits",
+                failure_cost="become a passive witness to another unsafe system",
+                operating_identity_invariant_kernel=(
+                    "tests trust through direct operational collaboration"
+                ),
+                initial_agency_state="guarded_evaluator",
+                allowed_agency_transitions=(
+                    "bounded_collaboration",
+                    "shared_operational_risk",
+                ),
             ),
         ),
         audience_information=AudienceInformationContract(
@@ -106,9 +126,28 @@ def make_canonical(*, revision: int = 1) -> CanonicalPackage:
             ),
         ),
         primary_reward="earned_belonging_through_competence",
-        payoff_promises=(
-            "new_group_trust",
-            "old_group_operational_cost",
+        payoff_layers=(
+            PayoffLayer(
+                payoff_id="new_group_professional_trust",
+                cadence=PayoffCadence.EPISODE,
+                subject_id="protagonist",
+                promise="visible work earns provisional trust",
+                delivery_policy="each episode must register a local trust change",
+            ),
+            PayoffLayer(
+                payoff_id="old_group_public_reclassification",
+                cadence=PayoffCadence.ARC,
+                subject_id="old_group",
+                promise="the old group confronts the operational cost",
+                delivery_policy="pay only after the new group trust is evidenced",
+            ),
+            PayoffLayer(
+                payoff_id="earned_belonging_through_competence",
+                cadence=PayoffCadence.SEASON,
+                subject_id="protagonist",
+                promise="the lead chooses earned belonging",
+                delivery_policy="accumulate through independent choices",
+            ),
         ),
         ending_direction="the protagonist chooses earned belonging",
         initial_relation_facts=(
@@ -117,6 +156,14 @@ def make_canonical(*, revision: int = 1) -> CanonicalPackage:
         ),
         forbidden_contradictions=("verbal_explanation_alone_cannot_restore_trust",),
         world_constraints=("professional_actions_must_be_observable",),
+        production_constraints=ProductionConstraints(
+            target_runtime_seconds_min=60,
+            target_runtime_seconds_max=120,
+            max_principal_characters_per_scene=3,
+            action_driven=True,
+            dialogue_policy="state changes must be carried by observable action",
+            max_dialogue_lines_per_scene=4,
+        ),
         reward_hierarchy=(
             RendererKind.COMPETENCE,
             RendererKind.SOCIAL_RECOGNITION,
@@ -190,6 +237,11 @@ def make_arc(
                 "old_group",
                 "attributes_departure_to_resentment",
             ),
+            StoryStateEntry(
+                StoryStateAxis.WORLD_OPERATION,
+                "new_group_workflow",
+                "unsafe_handoff_unresolved",
+            ),
         ),
         open_questions=("can_new_group_trust_be_earned",),
     )
@@ -209,6 +261,11 @@ def make_arc(
                 StoryStateAxis.KNOWLEDGE,
                 "old_group",
                 "sees_operational_gap_but_misreads_cause",
+            ),
+            StoryStateEntry(
+                StoryStateAxis.WORLD_OPERATION,
+                "new_group_workflow",
+                "safe_handoff_rule_installed",
             ),
         ),
         open_questions=("will_old_group_rewrite_the_departure",),
@@ -243,6 +300,7 @@ def make_arc(
         ),
         episode_count_min=2,
         episode_count_max=4,
+        production_constraints=canonical.production_constraints,
         continuity_invariants=(
             "old_group_cannot_know_new_group_private_evaluation",
             "trust_requires_observed_work",
@@ -316,6 +374,7 @@ def make_episode(
                 causal_role=CausalRole.MEANINGFUL_CHOICE,
                 renderer_primary=RendererKind.COMPETENCE,
                 renderer_secondary=(RendererKind.SOCIAL_RECOGNITION,),
+                principal_character_ids=("protagonist", "evaluator"),
                 duration_seconds=40,
                 dialogue=(
                     DialogueLine(
@@ -339,6 +398,7 @@ def make_episode(
                 causal_role=CausalRole.MEANINGFUL_ACTION,
                 renderer_primary=RendererKind.COMPETENCE,
                 renderer_secondary=(RendererKind.SOCIAL_RECOGNITION,),
+                principal_character_ids=("protagonist", "evaluator"),
                 duration_seconds=50,
                 dialogue=(
                     DialogueLine(
@@ -596,7 +656,7 @@ class ApprovalLedgerTests(unittest.TestCase):
         revised = replace(
             canonical,
             revision=2,
-            primary_reward="earned_authority_through_choice",
+            primary_reward="new_group_professional_trust",
         )
         revised_record = ArtifactRevision(
             work_id=revised.work_id,
