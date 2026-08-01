@@ -89,4 +89,3 @@
 - ingredient scarcity
 - menu and spatial change
 - operational rule consequence
-

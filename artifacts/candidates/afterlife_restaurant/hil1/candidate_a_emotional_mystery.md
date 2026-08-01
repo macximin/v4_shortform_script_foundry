@@ -89,4 +89,3 @@
 - nonverbal clue design
 - dish and underworld ingredient design
 - type of trace left in the restaurant
-

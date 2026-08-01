@@ -51,4 +51,3 @@ Future seed = 현실의 딸과 귀환
 - premise-distance 상태는 `pending_not_evaluated`다.
 - HIL 1 owner approval receipt는 없다.
 - 선택 전에는 HIL 2 아크나 신규 대본으로 내려가지 않는다.
-
