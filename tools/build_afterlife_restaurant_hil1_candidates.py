@@ -759,7 +759,7 @@ def build_outputs() -> dict[Path, str]:
             canonical_json(research_inputs) + "\n"
         ),
         OUTPUT_ROOT / "comparison.md": (
-            _comparison_markdown(specs, candidates) + "\n"
+            _comparison_markdown(specs, candidates).rstrip("\n") + "\n"
         ),
     }
     manifest_candidates: list[dict[str, object]] = []
@@ -768,7 +768,9 @@ def build_outputs() -> dict[Path, str]:
         json_name = f"candidate_{spec.key}.json"
         markdown_name = f"candidate_{spec.key}.md"
         outputs[OUTPUT_ROOT / json_name] = document.payload_json + "\n"
-        outputs[OUTPUT_ROOT / markdown_name] = document.markdown + "\n"
+        outputs[OUTPUT_ROOT / markdown_name] = (
+            document.markdown.rstrip("\n") + "\n"
+        )
         manifest_candidates.append(
             {
                 "key": spec.key,

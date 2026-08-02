@@ -1,0 +1,1 @@
+{"artifact_id":"afterlife_restaurant:arc01:completion_then_return","promotion_allowed":false,"reason":"이 revision 2 후보는 아직 독립 거리 감리를 받지 않았다. 내부 HIL 2 비교는 가능하지만 승인본이나 HIL 3 입력으로 승격할 수 없다.","receipt_type":"causal_chain_distance_status","status":"pending_not_evaluated"}

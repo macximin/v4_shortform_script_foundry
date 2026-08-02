@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "work_id": "afterlife_restaurant",
+  "episode": 1,
+  "source_file": "episode_001_daily_opening_v0.1.md",
+  "source_sha256": "06c254bd7e4710d08aefd0060b3af5f4076fbd35c1d064359dadea156e69926a",
+  "locked_at": "2026-08-02",
+  "lock_stage": "opening_episode_lock",
+  "status": "owner_locked_draft",
+  "locked_scope": [
+    "scene_order",
+    "dialogue",
+    "action_lines",
+    "four_minute_seventeen_second_timeline",
+    "status_bid_opening",
+    "daughter_video_call",
+    "dusk_opening_rule",
+    "kim_munseong_episode_two_hook"
+  ],
+  "overwrite_allowed": false,
+  "next_revision_requires_new_file": true,
+  "canonical_promotion_allowed": false,
+  "external_delivery_allowed": false,
+  "approval_dependencies": [
+    "episode_001_prologue_exception_candidate_v0.1",
+    "arc01_daily_opening_then_first_guest_rev3"
+  ],
+  "correction_at": "2026-08-02",
+  "correction_reason": "daily opening 조립 중 owner가 직접 잠근 v0.6 대사 두 줄이 이전 후보 문장으로 회귀한 오류를 바로잡았다.",
+  "correction_source": "episode_001_candidate_5_single_hit_assembled_v0.6.md lines 124-126",
+  "note": "owner가 현재 1화를 오프닝형 작업 기준본으로 잠갔다. HIL 예외 승인, 제작 승인, 외부 납품 승인은 별도다. 사용자 직접 수정분은 후속 조립에서 임의 변형하지 않는다."
+}

@@ -9,8 +9,12 @@ structured output 검증, Eval source-distance receipt의 수동 hash-bound
 반입을 구현했다.
 
 아직 실제 모델/API backend, 실제 owner 승인 대본과 외부 배포 기능은 없다.
-첫 실제 작품 HIL 1 candidate set은 존재하지만 owner 미승인이고 premise-distance
-검사는 pending이다. 테스트의 완성 대본은 계약 검증용 합성 fixture다.
+첫 실제 작품의 세 HIL 1 비교 후보와 초기 HIL 1·2 승인 산출물은 계약 검증 및
+변경 이력으로 보존한다. 현재 `afterlife_restaurant`의 집필 기준은 2026-08-03
+owner가 잠근 사람용 제1~3화와 시즌 1 A-Rail/B-Rail 가설이다. 기존 구조화
+캐노니컬은 현재 원고와 어긋나므로 새 원고 입력으로 사용하지 않으며, 캐노니컬
+v2 구조화는 별도 후속 단계다. premise-distance 검사와 외부 제작 전달 승인은
+계속 닫혀 있다. 테스트의 완성 대본은 계약 검증용 합성 fixture다.
 
 ## Core flow
 
@@ -115,6 +119,18 @@ py -3.12 tools/build_afterlife_restaurant_hil1_candidates.py --check
 Fact Ledger 위에서 감정 미스터리, 식당 누적 운영, 충돌하는 동업 관계의
 서로 다른 주 보상을 비교한다. 세 후보 모두 owner 미승인이고 HIL 2 입력이
 아니다.
+
+Owner가 승인한 수정 통합 기획은 다음 명령으로 재생성·검증한다.
+
+```powershell
+py -3.12 tools/build_afterlife_restaurant_hil1_approved_plan.py
+py -3.12 tools/build_afterlife_restaurant_hil1_approved_plan.py --check
+```
+
+결과는 `artifacts/approved/afterlife_restaurant/hil1/`에 있다. canonical JSON,
+owner-readable 정본, 상세 애니메이션 기획서, review payload와 owner 승인 receipt가
+exact hash로 묶인다. 이 승인은 HIL 1만 닫으며 HIL 2 사건 배열, 캐릭터 디자인 정본,
+premise-distance, 외부 납품 승인을 대신하지 않는다.
 
 ## HIL 계약이 보장하는 것
 
