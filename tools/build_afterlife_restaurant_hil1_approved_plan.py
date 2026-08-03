@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 from pathlib import Path
 import sys
 
@@ -20,6 +19,7 @@ from v4_shortform_script_foundry.approval import (  # noqa: E402
 from v4_shortform_script_foundry.canonical import (  # noqa: E402
     canonical_json,
     canonical_sha256,
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.canonical_package import (  # noqa: E402
     AudienceInformationContract,
@@ -391,7 +391,9 @@ def build_canonical(
 def build_outputs() -> dict[Path, str]:
     if not SERIES_PLAN_PATH.exists():
         raise FileNotFoundError(SERIES_PLAN_PATH)
-    series_plan_sha256 = hashlib.sha256(SERIES_PLAN_PATH.read_bytes()).hexdigest()
+    series_plan_sha256 = canonical_text_sha256(
+        SERIES_PLAN_PATH.read_text(encoding="utf-8")
+    )
     ledger = build_fact_ledger()
     canonical, grammar_basis, distance_status = build_canonical(ledger)
     review_payload = {

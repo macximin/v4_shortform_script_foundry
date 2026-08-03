@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.util
 from pathlib import Path
 import sys
@@ -22,6 +21,7 @@ from v4_shortform_script_foundry.approval import (  # noqa: E402
 from v4_shortform_script_foundry.canonical import (  # noqa: E402
     canonical_json,
     canonical_sha256,
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.planning_artifact import (  # noqa: E402
     export_hil2_planning_document,
@@ -74,15 +74,15 @@ def build_approval() -> tuple[object, ApprovalReceipt, dict[str, object]]:
         "adaptation_map_path": candidate_builder.ADAPTATION_MAP_PATH.relative_to(
             ROOT
         ).as_posix(),
-        "adaptation_map_sha256": hashlib.sha256(
-            candidate_builder.ADAPTATION_MAP_PATH.read_bytes()
-        ).hexdigest(),
+        "adaptation_map_sha256": canonical_text_sha256(
+            candidate_builder.ADAPTATION_MAP_PATH.read_text(encoding="utf-8")
+        ),
         "rough_beat_sheet_path": candidate_builder.EP001_ROUGH_PATH.relative_to(
             ROOT
         ).as_posix(),
-        "rough_beat_sheet_sha256": hashlib.sha256(
-            candidate_builder.EP001_ROUGH_PATH.read_bytes()
-        ).hexdigest(),
+        "rough_beat_sheet_sha256": canonical_text_sha256(
+            candidate_builder.EP001_ROUGH_PATH.read_text(encoding="utf-8")
+        ),
     }
     receipt = ApprovalReceipt.issue(
         gate_id=HilGate.HIL2_ARC,

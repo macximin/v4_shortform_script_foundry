@@ -2,11 +2,12 @@
 
 Renderer Router 기반 숏폼 스토리보드 대본 생성 코어를 clean-room으로 개발하는 독립 edge repo다.
 
-현재는 **owner-readable planning + Creative Writer Adapter vertical
-slice** 상태다. 기존 deterministic functional-draft canary를 보존하면서,
+현재는 **owner-readable planning + Creative Writer Adapter + production-text
+vertical slice** 상태다. 기존 deterministic functional-draft canary를 보존하면서,
 HIL 1/2/3 계약과 무효화·재개·품질 비교, pluggable writer backend의 strict
 structured output 검증, Eval source-distance receipt의 수동 hash-bound
-반입을 구현했다.
+반입, 승인 대본 이후의 사람용 촬영 표면·촬영 주석·승인 gate·artifact DAG를
+구현했다.
 
 아직 실제 모델/API backend, 실제 owner 승인 대본과 외부 배포 기능은 없다.
 첫 실제 작품의 세 HIL 1 비교 후보와 초기 HIL 1·2 승인 산출물은 계약 검증 및
@@ -33,6 +34,10 @@ Fact Ledger
   -> creative absolute floor
   -> independent BR0 / BR1 pairwise review
   -> HIL 3 Owner Approval
+  -> stable Episode Script Text atoms
+  -> deterministic Human Production Surface -> P0
+  -> separate Production Annotations -> P1
+  -> candidate Production Text Package -> P2
 ```
 
 현재 핵심 경계는 다음과 같다.
@@ -66,6 +71,18 @@ Fact Ledger
 - `episode_script`: HIL 3 완성 회차 대본 후보와 hard verifier를 소유한다.
   장면별 주요 인물 수, 러닝타임과 선택형 대사 줄 상한을 제작 제약으로
   검증한다.
+- `episode_script_text`: owner 승인 대본을 안정된 scene/atom 순서와 hash로
+  고정한다. status 변경은 내용 hash를 바꾸지 않는다.
+- `production_surface`: 촬영고 사람 표면을 결정론적으로 렌더링하고 모든 atom의
+  순서·문구 동치를 P0에서 검증한다.
+- `production_annotation`: CAMERA/SHOT/INSERT/EDIT를 대본과 분리된 hash-bound
+  주석으로 소유한다.
+- `story_change_request`: 제작 감리에서 발견된 행동·대사·순서 변경을 몰래
+  반영하지 않고 owner 결정으로 되돌린다.
+- `production_gate`와 `production_package`: P0/P1 exact receipt가 있는 경우에만
+  후보 제작 텍스트 묶음을 만들며 외부 전달은 자동 승인하지 않는다.
+- `artifact_graph`: 대화형 작업이 어느 노드를 만들고 무엇을 stale로 만드는지
+  DAG로 고정한다. SHOT/영상 노드는 확장 자리만 있고 아직 생성하지 않는다.
 - `writer_adapter`: 승인된 HIL 1/2 hash만 받는 backend-neutral request,
   strict structured output parser와 아직 거리 검사를 통과하지 않은 draft를
   소유한다. 원문·reference packet은 받지 않는다.
@@ -81,6 +98,16 @@ Fact Ledger
 이 repo의 자동 입력이나 생성 정본이 아니다.
 
 ## Vertical slice check
+
+개발 도구까지 포함한 로컬 설치와 검사는 다음처럼 실행한다.
+
+```powershell
+py -3.12 -m pip install --editable ".[dev]"
+py -3.12 -m ruff check .
+py -3.12 -m mypy
+```
+
+전체 계약 회귀 검사는 다음 명령을 쓴다.
 
 ```powershell
 py -3.12 -m unittest discover -s tests -v
@@ -107,6 +134,17 @@ py -3.12 tools/build_loop04_canary.py
 결과는 `artifacts/canaries/loop04/functional_draft_bundle.json`에 저장된다.
 완성 대사나 지문이 아니라 Creative Writer Adapter가 따라야 할 증거급 기능
 계약이며 모든 draft는 `candidate`다.
+
+현재 삼도식당 제1~3화의 레거시 촬영고 체인은 다음 읽기 전용 canary로
+검증한다. 원본이나 파생본을 수정하지 않고 해시·대사·장면·단계 분류만 읽는다.
+
+```powershell
+py -3.12 tools/audit_afterlife_restaurant_ep001_003_production_canary.py
+```
+
+v0.1~v0.2는 P0 표면 후보, v0.3~v0.4는 분리가 필요한 레거시 혼합 주석 후보,
+v0.5의 휴대전화·취식 동선은 `StoryChangeRequest`가 필요한 내용 변경으로
+분류한다. 어느 단계도 자동 승격하거나 외부 전달하지 않는다.
 
 첫 실제 작품 HIL 1 후보 세 개는 다음 명령으로 재생성·검증한다.
 

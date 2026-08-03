@@ -30,6 +30,7 @@ from v4_shortform_script_foundry.beat_patterns import (  # noqa: E402
 from v4_shortform_script_foundry.canonical import (  # noqa: E402
     canonical_json,
     canonical_sha256,
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.genre_grammar import (  # noqa: E402
     RendererKind,
@@ -68,7 +69,7 @@ SOURCE_PATHS = (
 
 
 def _file_sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return canonical_text_sha256(path.read_text(encoding="utf-8"))
 
 
 def _load_hil1_builder() -> ModuleType:

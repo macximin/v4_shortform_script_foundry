@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -22,6 +21,9 @@ from tools.build_afterlife_restaurant_hil2_arc01_candidate import (  # noqa: E40
 )
 from v4_shortform_script_foundry.arc_contract import (  # noqa: E402
     ArcContractVerifier,
+)
+from v4_shortform_script_foundry.canonical import (  # noqa: E402
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.canonical import (  # noqa: E402
     canonical_sha256,
@@ -86,7 +88,9 @@ class AfterlifeHil2Arc01CandidateTests(unittest.TestCase):
             manifest["causal_chain_distance_status_sha256"],
         )
         self.assertEqual(
-            hashlib.sha256(ADAPTATION_MAP_PATH.read_bytes()).hexdigest(),
+            canonical_text_sha256(
+                ADAPTATION_MAP_PATH.read_text(encoding="utf-8")
+            ),
             manifest["adaptation_map_sha256"],
         )
         self.assertEqual(
@@ -94,7 +98,9 @@ class AfterlifeHil2Arc01CandidateTests(unittest.TestCase):
             manifest["episode_001_rough_status"],
         )
         self.assertEqual(
-            hashlib.sha256(EP001_ROUGH_PATH.read_bytes()).hexdigest(),
+            canonical_text_sha256(
+                EP001_ROUGH_PATH.read_text(encoding="utf-8")
+            ),
             manifest["episode_001_rough_beat_sheet_sha256"],
         )
 

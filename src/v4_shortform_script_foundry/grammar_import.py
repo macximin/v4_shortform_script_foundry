@@ -6,7 +6,7 @@ from dataclasses import dataclass, replace
 import json
 from pathlib import Path
 import re
-from typing import Any
+from typing import Any, TypeGuard
 
 from .canonical import canonical_sha256
 from .genre_grammar import (
@@ -167,5 +167,5 @@ def _string_tuple(data: dict[str, Any], key: str) -> tuple[str, ...]:
     return tuple(value)
 
 
-def _is_sha256(value: Any) -> bool:
+def _is_sha256(value: Any) -> TypeGuard[str]:
     return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None

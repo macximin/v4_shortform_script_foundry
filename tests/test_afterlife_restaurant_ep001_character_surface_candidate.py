@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -24,6 +23,9 @@ from tools.build_afterlife_restaurant_ep001_established_service_candidate import
 )
 from tools.build_afterlife_restaurant_hil2_revision2_approved import (  # noqa: E402
     build_approval,
+)
+from v4_shortform_script_foundry.canonical import (  # noqa: E402
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.episode_script import (  # noqa: E402
     EpisodeObligationKind,
@@ -213,7 +215,9 @@ class CharacterSurfaceEpisodeOneTests(unittest.TestCase):
         self.assertFalse(format_receipt["raw_reference_event_order_ingested"])
         self.assertFalse(format_receipt["generator_ingest_allowed"])
         self.assertEqual(
-            hashlib.sha256(SOURCE_SCAFFOLD_PATH.read_bytes()).hexdigest(),
+            canonical_text_sha256(
+                SOURCE_SCAFFOLD_PATH.read_text(encoding="utf-8")
+            ),
             manifest["source_scaffold_sha256"],
         )
         self.assertFalse(any("002" in path.name for path in OUTPUT_ROOT.iterdir()))

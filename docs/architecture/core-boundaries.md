@@ -17,6 +17,13 @@
 | `arc_contract` | HIL 2 state transition, multi-axis story state, episode band and revision proposal | fixed episode allocation or finished dialogue |
 | `beat_patterns` | selectable renderer-compatible episode function patterns | universal beat count or story formula |
 | `episode_script` | HIL 3 finished script candidate and hard arc/runtime/state/reward binding | creative preference or automatic promotion |
+| `episode_script_text` | owner-approved story text split into stable ordered scene atoms | shooting presentation, camera directions or automatic revision |
+| `production_surface` | deterministic human-readable shooting-script presentation and P0 equivalence verification | story changes or directing decisions |
+| `production_annotation` | hash-bound camera, shot, insert and edit suggestions anchored to text atoms | screenplay text mutation or owner approval |
+| `story_change_request` | explicit owner decision route for dialogue, action, order and continuity changes found during production review | silently revising approved text |
+| `production_gate` | exact-hash P0/P1/P2/external approval receipts and role policy | identity authentication or automatic external approval |
+| `production_package` | exact approved text, verified surface, reviewed annotations and receipts as one candidate package | video generation, delivery or promotion |
+| `artifact_graph` | dependency DAG, cycle rejection, deterministic order and downstream invalidation | artifact content generation |
 | `writer_adapter` | backend-neutral writer request, strict structured-output parsing and unscreened draft projection | source/reference access, model vendor selection or promotion |
 | `source_distance_import` | manual Eval receipt verification and exact draft projection binding | source comparison, threshold calibration or raw reference text |
 | `creative_review` | common creative floor, independent BR0/BR1, structurally distinct candidate set and promotion readiness | hard fact verification or owner substitution |
@@ -29,6 +36,23 @@
 현재 코어에는 모델 또는 외부 서비스 호출이 없다. 실제 backend는
 `WriterBackend` protocol을 구현해 별도 주입하며, adapter는 backend가 어떤
 서비스인지 알지 않는다.
+
+## Production-text boundary
+
+HIL 3 owner 승인 뒤의 제작 표면은 승인 대본을 직접 고쳐 쓰지 않는다.
+
+```text
+EpisodeScriptText
+  -> deterministic HumanProductionSurface -> P0 exact-equivalence receipt
+  -> separate ProductionAnnotationSet      -> P1 review receipt
+  -> ProductionTextPackage                 -> P2 owner/producer decision
+  -> future ShotPlan / GeneratedVideo
+```
+
+대사·지문·순서·연속성 변경이 발견되면 `StoryChangeRequest`로 되돌아가 owner
+승인 뒤 새 `EpisodeScriptText` revision을 만든다. 새 text hash는 이전 surface,
+annotation, package와 향후 영상 노드를 모두 stale로 만든다. 외부 전달 gate는
+owner만 승인할 수 있고 현재 package builder는 이를 항상 `false`로 둔다.
 
 ## Source-distance boundary
 

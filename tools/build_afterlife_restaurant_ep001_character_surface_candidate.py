@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 import hashlib
-import json
 from pathlib import Path
 import sys
 
@@ -22,6 +21,7 @@ from v4_shortform_script_foundry.beat_patterns import BeatPatternKind  # noqa: E
 from v4_shortform_script_foundry.canonical import (  # noqa: E402
     canonical_json,
     canonical_sha256,
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.episode_script import (  # noqa: E402
     CausalRole,
@@ -569,7 +569,7 @@ PRODUCTION_BEATS: dict[str, tuple[tuple[int, str], ...]] = {
 
 
 def _file_sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return canonical_text_sha256(path.read_text(encoding="utf-8"))
 
 
 def build_scene_distance_status() -> dict[str, object]:

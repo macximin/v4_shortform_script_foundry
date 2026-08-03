@@ -4,12 +4,41 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "v4-shortform-script-foundry"
-version = "0.5.0"
+version = "0.6.0"
 description = "Hash-bound HIL core for original shortform script candidates"
 requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=2.3,<3",
+    "ruff>=0.16,<1",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+extend-exclude = [
+    "artifacts",
+    "imports",
+    "tmp",
+    "tools/build_afterlife_restaurant_ep001_previs.py",
+]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["E402"]
+"tools/*.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src"]
+pretty = true
+show_error_codes = true
+warn_unused_configs = true

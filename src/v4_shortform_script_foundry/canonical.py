@@ -40,3 +40,13 @@ def canonical_json(value: Any) -> str:
 
 def canonical_sha256(value: Any) -> str:
     return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
+
+
+def canonical_text(value: str) -> str:
+    """Normalize text for stable cross-platform content hashing."""
+
+    return value.replace("\r\n", "\n").replace("\r", "\n")
+
+
+def canonical_text_sha256(value: str) -> str:
+    return hashlib.sha256(canonical_text(value).encode("utf-8")).hexdigest()

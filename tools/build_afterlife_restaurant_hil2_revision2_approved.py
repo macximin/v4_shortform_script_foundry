@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.util
 from pathlib import Path
 import sys
@@ -22,6 +21,7 @@ from v4_shortform_script_foundry.approval import (  # noqa: E402
 from v4_shortform_script_foundry.canonical import (  # noqa: E402
     canonical_json,
     canonical_sha256,
+    canonical_text_sha256,
 )
 from v4_shortform_script_foundry.planning_artifact import (  # noqa: E402
     export_hil2_planning_document,
@@ -88,11 +88,13 @@ def build_approval() -> tuple[object, ApprovalReceipt, dict[str, object]]:
             "approval_receipt_sha256"
         ],
         "comparison_path": comparison_path.relative_to(ROOT).as_posix(),
-        "comparison_sha256": hashlib.sha256(comparison_path.read_bytes()).hexdigest(),
+        "comparison_sha256": canonical_text_sha256(
+            comparison_path.read_text(encoding="utf-8")
+        ),
         "episode_allocation_path": allocation_path.relative_to(ROOT).as_posix(),
-        "episode_allocation_sha256": hashlib.sha256(
-            allocation_path.read_bytes()
-        ).hexdigest(),
+        "episode_allocation_sha256": canonical_text_sha256(
+            allocation_path.read_text(encoding="utf-8")
+        ),
         "research_receipt_sha256": canonical_sha256(research_receipt),
     }
     receipt = ApprovalReceipt.issue(

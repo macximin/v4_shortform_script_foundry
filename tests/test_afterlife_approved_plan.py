@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -11,7 +10,10 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from v4_shortform_script_foundry.canonical import canonical_sha256  # noqa: E402
+from v4_shortform_script_foundry.canonical import (  # noqa: E402
+    canonical_sha256,
+    canonical_text_sha256,
+)
 
 
 ARTIFACT_ROOT = (
@@ -86,7 +88,7 @@ class AfterlifeApprovedPlanTests(unittest.TestCase):
         )
         self.assertEqual(
             manifest["series_plan_sha256"],
-            hashlib.sha256(plan_path.read_bytes()).hexdigest(),
+            canonical_text_sha256(plan_path.read_text(encoding="utf-8")),
         )
 
     def test_hil1_lock_does_not_claim_hil2_or_external_clearance(self) -> None:

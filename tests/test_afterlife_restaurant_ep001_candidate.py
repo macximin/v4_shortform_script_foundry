@@ -21,6 +21,9 @@ from tools.build_afterlife_restaurant_ep001_candidate import (  # noqa: E402
 from tools.build_afterlife_restaurant_hil2_arc01_approved import (  # noqa: E402
     build_approval,
 )
+from v4_shortform_script_foundry.canonical import (  # noqa: E402
+    canonical_text_sha256,
+)
 from v4_shortform_script_foundry.episode_script import (  # noqa: E402
     EpisodeObligationKind,
     EpisodeScriptStatus,
@@ -85,7 +88,9 @@ class AfterlifeRestaurantEp001CandidateTests(unittest.TestCase):
         self.assertEqual("not_started", manifest["owner_approval"])
         self.assertFalse(manifest["external_promotion_allowed"])
         self.assertEqual(
-            hashlib.sha256(SOURCE_SCAFFOLD_PATH.read_bytes()).hexdigest(),
+            canonical_text_sha256(
+                SOURCE_SCAFFOLD_PATH.read_text(encoding="utf-8")
+            ),
             manifest["source_scaffold_sha256"],
         )
         self.assertEqual(
@@ -105,7 +110,10 @@ class AfterlifeRestaurantEp001CandidateTests(unittest.TestCase):
         self.assertIn("도윤은 처음 보는 저승 재료로 망각어 불향 맑은국을", storyboard)
         self.assertIn("화면에 '망각어 불향 맑은국'이 뜬다", storyboard)
         self.assertNotIn("망각어가 도마 위에서 몸을 꺾을 때", storyboard)
-        self.assertIn("첫 코스가 명백히 맛있고", SOURCE_SCAFFOLD_PATH.read_text())
+        self.assertIn(
+            "첫 코스가 명백히 맛있고",
+            SOURCE_SCAFFOLD_PATH.read_text(encoding="utf-8"),
+        )
         self.assertNotIn("맛없", storyboard)
         self.assertNotIn("실패", storyboard)
         self.assertNotIn("—", storyboard)
