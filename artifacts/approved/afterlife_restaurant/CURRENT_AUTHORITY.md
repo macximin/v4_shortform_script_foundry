@@ -8,9 +8,18 @@
 - `artifacts/candidates/afterlife_restaurant/planning/제4-5화_잠금기준_v9.md`
 - `artifacts/candidates/afterlife_restaurant/planning/삼도식당_촬영고_대본양식_기준_v0.1.md`
 - `artifacts/candidates/afterlife_restaurant/planning/시즌1_A_Rail_B_Rail_10아크_가설_v0.1.md`
-- `artifacts/candidates/afterlife_restaurant/촬영고_제1-3화_현장표면_행동연결정리_합본_v0.5.md`
 
 제1~5화 원고 내용은 owner 잠금 상태다. 촬영고 양식 채택은 기존 제1~9화의 내용 수정 승인이 아니다. 현재 원고는 대사·지문·장면 순서·인물·음식·사건을 그대로 보존하며, 촬영고가 필요하면 원본을 덮어쓰지 않는 내용 보존형 별도 보기만 만든다. 제6~9화의 기존 파일도 삭제하지 않는다. B006 이후 새 원고는 첫 후보부터 촬영고 양식을 적용한다. B006 이후 Rail은 원고화 전까지 수정 가능한 가설이다.
+
+## 현재 제작 표면 후보
+
+- `artifacts/candidates/afterlife_restaurant/촬영고_제1-3화_현장표면_행동연결정리_합본_v0.5.md`
+
+v0.5는 owner 지시에 따라 휴대전화 전달·회수 동선과 취식 순서를 정리한 별도
+제작 표면 후보다. 제1~3화 잠금 원고를 대체하거나 내용 보존형 동일본으로
+취급하지 않는다. 캐노니컬 본문 revision으로 반영하려면 hash-bound
+`StoryChangeRequest`와 별도 owner 결정이 필요하다. 외부 제작 전달·납품·승격은
+여전히 미승인이다.
 
 ## 이전 구조화 산출물
 
