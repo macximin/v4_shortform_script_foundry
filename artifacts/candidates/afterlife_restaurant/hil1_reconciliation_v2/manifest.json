@@ -1,0 +1,21 @@
+{
+  "artifact": "afterlife_restaurant_hil1_reconciliation_v2",
+  "status": "candidate",
+  "hash_reconciliation_required": true,
+  "owner_review_required": true,
+  "external_promotion_allowed": false,
+  "screenplay_scope": {
+    "locked_episode_count": 9,
+    "scripts_modified": false,
+    "source_lock": "source_lock.md"
+  },
+  "contains": [
+    "synopsis.md",
+    "character_sheet.md",
+    "arc_map.md",
+    "look_core.md",
+    "canonical_planning_v2.md",
+    "source_lock.md"
+  ],
+  "visual_corpus": "https://drive.google.com/drive/folders/1SPLZMreRjuphav7qsfMnctoG9Qf3Fso4"
+}
